@@ -1,0 +1,66 @@
+-------------------------------------------------------
+						Result
+
+id, resultSize, requestedSize, pageCursor
+-------------------------------------------------------
+
+
+-----------------------------------------------------------------------------------------------
+										DataStream
+										
+id, cstId, streamId, dataType, forwardTo, description, units, dataTTl, rollupTTl, result
+-----------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------
+										CurrentValue
+
+id, timestamp, timestampISO, serverTimestamp, serverTimestampISO, data, description, quality, datastream
+-------------------------------------------------------------------------------------------------
+
+
+
+CREATE TABLE Result
+(
+id int NOT NULL UNIQUE,
+resultSize int,
+requestedSize int,
+pageCursor varchar(255),
+);
+
+
+CREATE TABLE DataStream
+(
+id int NOT NULL UNIQUE,
+cstId varchar(255),
+streamId varchar(255),
+dataType varchar(255),
+description varchar(255),
+units int,
+dataTTl int,
+rollupTTl int
+result int FOREIGN KEY REFERENCES Result(id)
+);
+
+
+CREATE TABLE CurrentValue
+(
+id int NOT NULL UNIQUE,
+timestamp varchar(255),
+timestampISO varchar(255),
+serverTimestamp varchar(255),
+serverTimestampISO varchar(255),
+data date
+description varchar(255),
+quality varchar(255)
+datastream int FOREIGN KEY REFERENCES DataStream(id)
+);
+
+
+
+query example
+
+SELECT r.id, r.r.esultSize, r.requestedSize, r.pageCursor
+FROM CurrentValue cv, DataStream ds, Result r
+WHERE cv.datastream = ds.id and ds.result = r.id 
+AND cv.id = 1121
